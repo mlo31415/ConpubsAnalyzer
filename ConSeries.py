@@ -14,9 +14,6 @@ class Con:
     def __init__(self, seriesname: str):
         self._name: str=""                  # Name including number designation
         self._seriesname: str=seriesname
-        #self._locale: str=""                # Name of locale where the con was held
-        #self._dates: Optional[FanzineDateRange]=None      # Date range of the con
-        #self._gohs: str=""                  # A list of the con's GoHs
         self._URL: str=""                   # The URL of the individual con page, if any
 
 
@@ -38,7 +35,7 @@ class Con:
         cpc=ConpubsCounts()
         for row in cidc.Datasource._conFileList:        # Walk the list of files in a con instance, counting each in turn
             if row._sitefilename is not None and len(row._sitefilename) > 0:
-                cpc+=row.Counts()
+                cpc+=row.Counts()       # Increment the ConInstance the counts by adding the counts of one ConInstanceFile
 
         return cpc
 
@@ -76,10 +73,9 @@ class ConSeriesPage():
 
         assert len(conseriesname) > 0
         self.Seriesname=conseriesname
-        # Clear out any old information
         self.Datasource=ConSeries(conseriesname)
 
-        Log("Loading "+self.Seriesname+"/index.html from fanac.org")
+        Log("Loading "+"/"+self.Seriesname+"/index.html from fanac.org")
         file=FTP().GetFileAsString("/"+self.Seriesname, "index.html")
 
         # Get the JSON from the file

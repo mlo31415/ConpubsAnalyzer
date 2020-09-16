@@ -23,11 +23,11 @@ class ConpubsCounts():
     def __str__(self) -> str:
         s=""
         if self.title is not None and len(self.title) > 0:
-            s+=self.title+"\n"
-        s+="#pagess="+str(self.numpages)+"\n"
+            s+="** "+self.title+" **\n"
+        s+="#pages="+str(self.numpages)+"\n"
         s+="#PDFs="+str(self.numpdfs)+"\n"
-        s+="#imagess="+str(self.numimages)+"\n"
-        s+="#linkss="+str(self.numlinks)+"\n"
+        s+="#images="+str(self.numimages)+"\n"
+        s+="#links="+str(self.numlinks)+"\n"
         if self.numcons > 0:
             s+="#cons="+str(self.numcons)+"\n"
         if self.numseries > 0:

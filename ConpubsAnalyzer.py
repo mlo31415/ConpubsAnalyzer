@@ -14,13 +14,12 @@ from Log import LogOpen, Log
 class Convention:
     def __init__(self):
         self._name: str=""      # The name of the convention series
-        self._URL: str=""       # The location of the convention series html page relative to the main cons page; empty if no series page exists yet
 
 
     def FromJson(self, val: str) -> Convention:
         d=json.loads(val)
         self._name=d["_name"]
-        self._URL=d["_URL"]
+        # self._URL=d["_URL"]
 
         return self
 
@@ -30,7 +29,6 @@ class ConList():
 
     def __init__(self):
         self._conlist: List[Convention]=[]
-        self._toptext: str=""
 
     # -----------------------------
     def FromJson(self, val: str) -> ConList:
@@ -83,7 +81,9 @@ for row in listOfConSeries._conlist:
     cpc+=counts
 
 Log(str(cpc))
-print(str(csplist))
+Log("\n\n")
+for csp in csplist:
+    Log(str(csp))
 pass
 
 

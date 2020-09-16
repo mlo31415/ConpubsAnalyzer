@@ -12,10 +12,6 @@ from HelpersPackage import FindBracketedText, RemoveHTTP
 # An individual file to be listed under a convention
 class ConInstanceFile:
     def __init__(self):
-        self._displayTitle: str=""      # The name as shown to the world on the website
-        #self._notes: str=""             # The free-format description
-        #self._localfilename: str=""     # The filename of the source file
-        #self._localpathname: str="."    # The local pathname of the source file (path+filename)
         self._sitefilename: str=""      # The name to be used for this file on the website
         self._size: int=0               # The file's size in bytes
         self._isText: bool=False        # Is this a piece of text rather than a convention?
@@ -71,7 +67,6 @@ class ConInstancePage():
 
     def __init__(self):
         self._conFileList: List[ConInstanceFile]=[]
-        #self._name: str=""
 
     def FromJson(self, val: str) -> ConInstancePage:
         d=json.loads(val)
@@ -83,13 +78,6 @@ class ConInstancePage():
                 self._conFileList.append(ConInstanceFile().FromJson(c))
 
         return self
-
-    def Counts(self) -> ConpubsCounts:
-        Log("ConInstancePage.Counts(???)")
-        cpc=ConpubsCounts()
-        for row in self._conFileList:
-            cpc+=row.Counts()
-        return cpc
 
 
 #####################################################################################
