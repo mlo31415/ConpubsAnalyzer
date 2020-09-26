@@ -80,10 +80,9 @@ for row in listOfConSeries._conlist:
     csplist.append(counts)
     cpc+=counts
 
-Log(str(cpc))
 Log("\n\n")
 for csp in csplist:
     Log(str(csp))
-pass
 
+Log(str(cpc))
 
