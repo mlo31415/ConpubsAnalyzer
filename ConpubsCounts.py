@@ -20,6 +20,21 @@ class ConpubsCounts():
         self.numlinks+=other.numlinks
         return self
 
+    def Debug(self) -> str:
+        s=""
+        if self.title is not None and len(self.title) > 0:
+            s+="** "+self.title+": "
+        s+="  #pages="+str(self.numpages)
+        s+="  #PDFs="+str(self.numpdfs)
+        s+="  #images="+str(self.numimages)
+        s+="  #links="+str(self.numlinks)
+        if self.numcons > 0:
+            s+="  #cons="+str(self.numcons)
+        if self.numseries > 0:
+            s+="  #series="+str(self.numseries)
+
+        return s
+
     def __str__(self) -> str:
         s=""
         if self.title is not None and len(self.title) > 0:

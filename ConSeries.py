@@ -37,6 +37,8 @@ class Con:
             if row._sitefilename is not None and len(row._sitefilename) > 0:
                 cpc+=row.Counts()       # Increment the ConInstance the counts by adding the counts of one ConInstanceFile
 
+        cpc.numcons=1
+
         return cpc
 
 
