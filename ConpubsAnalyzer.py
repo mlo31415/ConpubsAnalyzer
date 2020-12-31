@@ -27,7 +27,7 @@ class ConList():
     _element=Convention
 
     def __init__(self):
-        self._conlist: List[Convention]=[]
+        self.conlist: List[Convention]=[]
 
     # -----------------------------
     def FromJson(self, val: str) -> ConList:
