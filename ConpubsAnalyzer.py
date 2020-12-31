@@ -23,7 +23,7 @@ class Convention:
         return self
 
 
-class ConList():
+class ConList:
     _element=Convention
 
     def __init__(self):
@@ -53,7 +53,7 @@ if not f.OpenConnection("FTP Credentials.json"):
 Log("Loading root/index.html")
 file=FTP().GetFileAsString("", "index.html")
 if file is None:
-    assert (False)
+    assert False
 
 # Get the JSON
 j=FindBracketedText(file, "fanac-json")[0]
@@ -65,7 +65,7 @@ listOfConSeries=[]
 try:
     d=json.loads(j)
     listOfConSeries=ConList().FromJson(d["_datasource"])
-except (json.decoder.JSONDecodeError):
+except json.decoder.JSONDecodeError:
     Log("JSONDecodeError when loading convention information from conpubs' index.html")
     exit(0)
 
