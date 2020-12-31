@@ -13,13 +13,12 @@ from Log import LogOpen, Log
 
 class Convention:
     def __init__(self):
-        self._name: str=""      # The name of the convention series
+        self.name: str=""      # The name of the convention series
 
 
     def FromJson(self, val: str) -> Convention:
-        d=json.loads(val)
-        self._name=d["_name"]
-        # self._URL=d["_URL"]
+        dx=json.loads(val)
+        self.name=dx["_name"]
 
         return self
 
@@ -32,11 +31,11 @@ class ConList():
 
     # -----------------------------
     def FromJson(self, val: str) -> ConList:
-        d=json.loads(val)
-        self._conlist=[]
+        dx=json.loads(val)
+        self.conlist=[]
         i=0
-        while str(i) in d.keys():       # Using str(i) is because json merges 1 and "1" as the same. (It appears to be a bug.)
-            self._conlist.append(Convention().FromJson(d[str(i)]))
+        while str(i) in dx.keys():       # Using str(i) is because json merges 1 and "1" as the same. (It appears to be a bug.)
+            self.conlist.append(Convention().FromJson(dx[str(i)]))
             i+=1
         return self
 
@@ -73,10 +72,10 @@ except (json.decoder.JSONDecodeError):
 # Walk the list of ConSeries, loading each in turn
 cpc=ConpubsCounts()
 csplist: List[ConpubsCounts]=[]
-for row in listOfConSeries._conlist:
-    csp=ConSeriesPage(row._name)
+for row in listOfConSeries.conlist:
+    csp=ConSeriesPage(row.name)
     counts=csp.Counts()
-    counts.title=row._name
+    counts.title=row.name
     csplist.append(counts)
     cpc+=counts
 
