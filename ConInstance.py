@@ -106,7 +106,10 @@ class ConInstanceClass():
     # ----------------------------------------------
     def FromJson(self, val: str) -> ConInstanceClass:
         d=json.loads(val)
-        self.ConInstanceName=d["ConInstanceName"]
+        try:
+            self.ConInstanceName=d["ConInstanceName"]
+        except:
+            LogError(f"ConInstanceClass.FronJson of {self._coninstancename} failed to find member 'ConInstanceName'")
         #self.ConInstanceTopText=d["ConInstanceStuff"]
         #self.ConInstanceFancyURL=d["ConInstanceFancyURL"]
         #if d["ver"] > 3:
