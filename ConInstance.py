@@ -3,7 +3,7 @@ from typing import List, Union, Optional
 
 import os
 import json
-from Log import Log
+from Log import Log, LogError
 from FTP import FTP
 from ConpubsCounts import ConpubsCounts
 from HelpersPackage import FindBracketedText, RemoveHTTP
@@ -42,7 +42,7 @@ class ConInstanceFile:
         return self
 
     def Counts(self) -> ConpubsCounts:
-        Log("ConInstanceFile.Counts("+self._sitefilename+")")
+        Log(f"ConInstanceFile.Counts({self._sitefilename})")
         cpc=ConpubsCounts()
         _, ext = os.path.splitext(self._sitefilename.lower())
 
@@ -88,12 +88,13 @@ class ConInstanceClass():
         self.Datasource=ConInstancePage()
 
         self._coninstancename=coninstancename
+        Log(f"CIC: Loading /{seriesname}/{self._coninstancename}/index.html")
 
         # Read the existing CIP
-        Log("Downloading /"+seriesname+"/"+self._coninstancename+"/index.html")
-        file=FTP().GetFileAsString("/"+seriesname+"/"+self._coninstancename, "index.html")
+        Log(f"CIC: Downloading /{seriesname}/{self._coninstancename}/index.html")
+        file=FTP().GetFileAsString(f"/{seriesname}/{self._coninstancename}", "index.html")
         if file is None:
-            Log("DownloadConInstancePage: /"+seriesname+"/"+self._coninstancename+"/index.html does not exist")
+            Log(f"CIC: DownloadConInstancePage: /{seriesname}/{self._coninstancename}/index.html does not exist")
             return  # Just return with the ConInstance page empty
 
         # Get the JSON
@@ -101,7 +102,7 @@ class ConInstanceClass():
         if j is not None and j != "":
             self.FromJson(j)
 
-        Log("/"+seriesname+"/"+self._coninstancename+"/index.html downloaded")
+        Log(f"CIC: /{seriesname}/{self._coninstancename}/index.html downloaded")
 
     # ----------------------------------------------
     def FromJson(self, val: str) -> ConInstanceClass:
