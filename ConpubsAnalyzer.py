@@ -43,45 +43,51 @@ class ConList:
 ###############################################################################
 ###############################################################################
 
-LogOpen("Log -- ConpubsAnalyzer.txt", "Log (Errors) -- ConpubsAnalyzer.txt")
 
-f=FTP()
-if not f.OpenConnection("FTP Credentials.json"):
-    Log("Main: OpenConnection('FTP Credentials.json' failed")
-    exit(0)
+def main():
+    LogOpen("Log -- ConpubsAnalyzer.txt", "Log (Errors) -- ConpubsAnalyzer.txt")
 
-Log("Loading root/index.html")
-file=FTP().GetFileAsString("", "index.html")
-if file is None:
-    assert False
+    f=FTP()
+    if not f.OpenConnection("FTP Credentials.json"):
+        Log("Main: OpenConnection('FTP Credentials.json' failed")
+        exit(0)
 
-# Get the JSON
-j=FindBracketedText(file, "fanac-json")[0]
-if j is None or j == "":
-    Log("Can't find convention information json in conpubs' index.html")
-    exit(0)
+    Log("Loading root/index.html")
+    file=FTP().GetFileAsString("", "index.html")
+    if file is None:
+        assert False
 
-listOfConSeries=[]
-try:
-    d=json.loads(j)
-    listOfConSeries=ConList().FromJson(d["_datasource"])
-except json.decoder.JSONDecodeError:
-    Log("JSONDecodeError when loading convention information from conpubs' index.html")
-    exit(0)
+    # Get the JSON
+    j=FindBracketedText(file, "fanac-json")[0]
+    if j is None or j == "":
+        Log("Can't find convention information json in conpubs' index.html")
+        exit(0)
 
-# Walk the list of ConSeries, loading each in turn
-cpc=ConpubsCounts()
-csplist: List[ConpubsCounts]=[]
-for row in listOfConSeries.conlist:
-    csp=ConSeriesPage(row.name)
-    counts=csp.Counts()
-    counts.title=row.name
-    csplist.append(counts)
-    cpc+=counts
+    listOfConSeries=[]
+    try:
+        d=json.loads(j)
+        listOfConSeries=ConList().FromJson(d["_datasource"])
+    except json.decoder.JSONDecodeError:
+        Log("JSONDecodeError when loading convention information from conpubs' index.html")
+        exit(0)
 
-Log("\n\n")
-for csp in csplist:
-    Log(str(csp))
+    # Walk the list of ConSeries, loading each in turn
+    cpc=ConpubsCounts()
+    csplist: List[ConpubsCounts]=[]
+    for row in listOfConSeries.conlist:
+        csp=ConSeriesPage(row.name)
+        counts=csp.Counts()
+        counts.title=row.name
+        csplist.append(counts)
+        cpc+=counts
 
-Log(str(cpc))
-Log("\nGrand Total: "+cpc.Debug(), isError=True)
+    Log("\n\n")
+    for csp in csplist:
+        Log(str(csp))
+
+    Log(str(cpc))
+    Log("\nGrand Total: "+cpc.Debug(), isError=True)
+
+
+if __name__ == "__main__":
+    main()
