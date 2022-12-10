@@ -63,7 +63,7 @@ class ConInstanceFile:
 #####################################################################################################
 
 class ConInstancePage():
-    _element=ConInstanceFile
+    Element=ConInstanceFile
 
     def __init__(self):
         self._conFileList: List[ConInstanceFile]=[]
