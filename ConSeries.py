@@ -30,7 +30,7 @@ class Con:
         return self
 
     def Counts(self) -> ConpubsCounts:
-        Log("Con.Counts("+self._seriesname+"/"+self._name+")")
+        Log(f"Con.Counts({self._seriesname}/{self._name})")
         cidc=ConInstanceClass(self._seriesname, self._name)
         cpc=ConpubsCounts()
         for row in cidc.Datasource._conFileList:        # Walk the list of files in a con instance, counting each in turn
