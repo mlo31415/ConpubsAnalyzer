@@ -24,7 +24,7 @@ class Convention:
 
 
 class ConList:
-    _element=Convention
+    Element=Convention
 
     def __init__(self):
         self.conlist: List[Convention]=[]
