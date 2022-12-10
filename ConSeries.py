@@ -56,8 +56,9 @@ class ConSeries():
 
     def FromJson(self, val: str) -> ConSeries:
         d=json.loads(val)
-        self._name=RemoveAccents(d["_name"])    # Clean out old accented entries
-        self._stuff=d["_stuff"]
+        self._name=RemoveAccents(d["_name"])      # Clean out old accented entries
+        if "_stuff" in d.keys():
+            self._stuff=d["_stuff"]
         self._series=[]
         i=0
         while str(i) in d.keys():       # This is because json merges 1 and "1" as the same. (It appears to be a bug.)
