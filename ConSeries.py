@@ -45,7 +45,7 @@ class Con:
 
 ####################################################################################
 class ConSeries():
-    _element=Con
+#    _element=Con
 
     def __init__(self, seriesname: str):
         self._name: str=""
