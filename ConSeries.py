@@ -1,12 +1,13 @@
 from __future__ import annotations
-from typing import Optional, List, Union, Tuple
+from typing import List
 import json
+import re
 
 from Log import Log
 from FTP import FTP
-from HelpersPackage import RemoveAccents, FindBracketedText
-from ConpubsCounts import ConpubsCounts
-from ConInstance import ConInstanceClass
+from HelpersPackage import RemoveAccents, FindBracketedText, FindBracketedText2, ExtractInvisibleTextInsideFanacComment, Float0
+from ConpubsCounts import ConpubsCounts, NameLinkCounts
+from ConInstance import ConInstance
 
 
 ####################################################################################
@@ -29,13 +30,14 @@ class Con:
         #     self._URL=""
         return self
 
+
     def Counts(self) -> ConpubsCounts:
         Log(f"Con.Counts({self._seriesname}/{self._name})")
         cidc=ConInstanceClass(self._seriesname, self._name)
         cpc=ConpubsCounts()
-        for row in cidc.Datasource._conFileList:        # Walk the list of files in a con instance, counting each in turn
+        for row in cidc.CIP._conPageFileList:        # Walk the list of files in a con instance, counting each in turn
             if row._sitefilename is not None and len(row._sitefilename) > 0:
-                cpc+=row.Counts()       # Increment the ConInstance the counts by adding the counts of one ConInstanceFile
+                cpc+=row.Counts       # Increment the ConInstance the counts by adding the counts of one ConInstanceFile
 
         cpc.numcons=1
 
@@ -71,29 +73,52 @@ class ConSeries():
 #####################################################################################
 # This holds a con series index page
 class ConSeriesPage():
-
-    def __init__(self, conseriesname):
+    def __init__(self, conseriesname: str):
 
         assert len(conseriesname) > 0
         self.Seriesname=conseriesname
         self.Datasource=ConSeries(conseriesname)
+        self.Counts=ConpubsCounts()
 
-        Log("Loading "+"/"+self.Seriesname+"/index.html from fanac.org")
+        Log(f"Loading /{self.Seriesname}/index.html from fanac.org")
         file=FTP().GetFileAsString("/"+self.Seriesname, "index.html")
 
+        # Figure out what version this conseriespage is
+        # V1.0 is the old json-based format (we have this format if there is a block of json in the file)
+        # V2.0 (and potentially higher) is the new pure-HTML format
+
         # Get the JSON from the file
+        version=0
         j=FindBracketedText(file, "fanac-json")[0]
-        if j is None or j == "":
-            Log("DownloadConSeries: Can't load convention information from /"+self.Seriesname+"index.html")
-            return
+        if j is None or len(j) < 20:
+            version=2
+        else:
+            version=Float0(ExtractInvisibleTextInsideFanacComment(file, "version"))
 
-        try:
-            self.FromJson(j)
-        except (json.decoder.JSONDecodeError):
-            Log("DownloadConSeries: JSONDecodeError when loading convention information from /"+self.Seriesname+"index.html")
-            return
+        Log(f"{conseriesname} -- {version}")
+        listOfNLCs: list[NameLinkCounts]=[]
+        if version < 1.99:
+            try:
+                self.FromJson(j)
+            except (json.decoder.JSONDecodeError):
+                Log(f"DownloadConSeries: JSONDecodeError when loading convention information from /{self.Seriesname}index.html")
+                return
 
-        Log(self.Seriesname+" Loaded")
+            # Extract the info we need
+            for coninstance in self.Datasource._series:
+                listOfNLCs.append(NameLinkCounts(Name=coninstance._name, URL=coninstance._URL))
+
+        else:
+            # Interpret the HTML
+            listOfNLCs=self.LoadConSeriesFromHTML(file)
+
+        Log(f"{len(listOfNLCs)} instances found")
+
+        # Process the con instances
+        for nlc in listOfNLCs:
+            if nlc.URL != "":
+                ci=ConInstance("/"+self.Seriesname, nlc.name)
+                self.Counts+=ci.Counts
 
 
     def FromJson(self, val: str) -> ConSeriesPage:                    # MainConSeriesFrame
@@ -105,12 +130,87 @@ class ConSeriesPage():
             self.Datasource=ConSeries(self.Seriesname).FromJson(d["_datasource"])
         return self
 
-    # Get the counts for a ConSeries by summing the counts of each ConInstance in the series
-    def Counts(self) -> ConpubsCounts:
-        Log("ConSeriesFrame.Counts("+self.Seriesname+")")
-        cpc=ConpubsCounts()
-        cpc.numseries=1
-        for con in self.Datasource._series: # Walk the list of con instances opening and counting each in turn
-            if con._URL is not None and len(con._URL) > 0:
-                cpc+=con.Counts()
-        return cpc
+    #----------------------------
+    # Populate the ConSeriesFrame structure
+    def LoadConSeriesFromHTML(self, file: str) -> List[NameLinkCounts]:
+        # Look for the series name in the header
+        head, rest=FindBracketedText2(file, "head", caseInsensitive=True)
+
+        # There should only be one table and that contains the list of con instances
+        table, _=FindBracketedText2(rest, "fanac-table", caseInsensitive=True)
+        if table == "":
+            Log(f"DecodeConSeriesHTML(): failed to find the <fanac-table> tags")
+            return []
+
+        # Read the table
+        # Get the table header and decode the columns
+        header, rest=FindBracketedText2(table, "thead", caseInsensitive=True)
+        if header == "":
+            Log(f"DecodeConSeriesHTML(): failed to find the <thead> tags in the body")
+            return []
+        # Find the column headings
+        headers=self.ReadTableRow(header, "th")
+
+        # Now read the rows
+        rows=[]
+        while True:
+            rowtext, rest=FindBracketedText2(rest, "tr", caseInsensitive=True)
+            if rowtext == "":
+                break
+            row=self.ReadTableRow(rowtext)
+            if len(row) < len(headers):
+                row.extend(" "*(len(headers)-len(row)))
+            rows.append(row)
+
+        cons: List[NameLinkCounts]=[]
+        for row in rows:
+            name=""
+            URL=""
+            cpc=ConpubsCounts()
+            for icol, header in enumerate(headers):
+                match header:
+                    case "Convention":
+                        name, URL, _ = self.ConNameInfoUnpack(row[icol])
+
+            cons.append(NameLinkCounts(Name=name, URL=URL))
+
+        return cons
+
+
+    #----------------------------------------------------------------------
+    # Read a row from an HTML table and output a list of cell contents
+    # The input is normally the text bounded by <tr>...</tr>
+    # The cells are all the strings delimited by <delim>...</delim>
+    def ReadTableRow(self, row: str, delim="td") -> list[str]:
+        rest=row
+        out=[]
+        while True:
+            item, rest=FindBracketedText2(rest, delim, caseInsensitive=True)
+            if item == "":
+                break
+            if f"<{delim}>" in item:    # This corrects for an error in which we have the pattern '<td>xxx<td>yyy</td>' which displays perfectly well
+                item=item.split(f"<{delim}>")
+                out.extend(item)
+            else:
+                out.append(item)
+
+        return out
+
+
+    #---------------------
+    # Unpack a conpubs conname from a con instance convention column  which may include a url, the url's text (a name), and some extra material
+    # header is of the form <a href=xxxx>yyyy</a>zzzz
+    # Generate the Name, URL and extra columns
+    # Reversed by ConNameInfoPack()
+    def ConNameInfoUnpack(self, packed: str) -> (str, str, str):
+        name=packed
+        url=""
+        extra=""
+
+        m=re.match('<a href=\"?(.*?)\"?>(.*?)</a>(.*)$', packed, re.IGNORECASE)
+        if m is not None:
+            url=m.groups()[0].strip()
+            name=m.groups()[1].strip()
+            extra=m.groups()[2].strip()
+
+        return name, url, extra

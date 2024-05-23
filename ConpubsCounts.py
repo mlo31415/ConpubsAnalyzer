@@ -49,3 +49,12 @@ class ConpubsCounts():
             s+="#series="+str(self.numseries)+"\n"
 
         return s
+
+
+
+#-------------------------------------------------------------
+class NameLinkCounts:
+    def __init__(self, Name: str = "", URL: str="", Counts: ConpubsCounts = ConpubsCounts()):
+        self.name: str=Name
+        self.URL: str=URL
+        self.counts: ConpubsCounts=Counts
