@@ -115,11 +115,15 @@ class ConSeriesPage():
         Log(f"{len(listOfNLCs)} instances found")
 
         # Process the con instances
+        numcons=0
         for nlc in listOfNLCs:
             if nlc.URL != "":
                 ci=ConInstance("/"+self.Seriesname, nlc.name)
-                self.Counts+=ci.Counts
+                numcons+=1     # We just finished a con
                 self.Counts+=ci.Totals
+
+        self.Counts.numcons=numcons
+        self.Counts.numseries=1     # We just finished a series
 
 
     def FromJson(self, val: str) -> ConSeriesPage:                    # MainConSeriesFrame
