@@ -106,20 +106,6 @@ class ConFileData:
 
         return cpc
 
-    # Make a deep copy of a ConFileData
-    def Copy(self):
-        cf=ConFileData()
-        cf._displayTitle=self._displayTitle
-        cf._notes=self._notes
-        cf._localfilename=self._localfilename
-        cf._localpathname=self._localpathname
-        cf._sitefilename=self._sitefilename
-        cf._size=self._size
-        cf._isText=self._isText
-        cf._isLink=self._isLink
-        cf._pages=self._pages
-        return cf
-
 
 
     @property
