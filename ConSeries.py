@@ -124,7 +124,7 @@ class ConSeriesPage():
                 # Load the con instance from the server and compute its counts
                 ci=ConInstance("/"+self.Seriesname, nlc.name)
                 numcons+=1
-                self.Counts+=ci.Totals
+                self.Counts+=ci.ComputeCounts
 
         self.Counts.numcons=numcons
         self.Counts.numseries=1     # We just finished a series
