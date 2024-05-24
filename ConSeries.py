@@ -88,17 +88,17 @@ class ConSeriesPage():
         # V1.0 is the old json-based format (we have this format if there is a block of json in the file)
         # V2.0 (and potentially higher) is the new pure-HTML format
 
-        # Get the JSON from the file
-        version=0
+        # Try to get the JSON and the version from the file
+        version=0   # If we find json, then for our purposes, this is a version 0 file. (There are versions in the json, but they are not the overall version)
         j=FindBracketedText(file, "fanac-json")[0]
         if j is None or len(j) < 20:
-            version=2
-        else:
-            version=Float0(ExtractInvisibleTextInsideFanacComment(file, "version"))
+            version=Float0(ExtractInvisibleTextInsideFanacComment(file, "version"))     # Look for a version in the file
+            if version == 0:
+                version=1       # If this is not a version 0 file and no version is found in it, it's version 1
 
         Log(f"{conseriesname} -- {version}")
         listOfNLCs: list[NameLinkCounts]=[]
-        if version < 1.99:
+        if version < 0.99:
             try:
                 self.FromJson(j)
             except (json.decoder.JSONDecodeError):
