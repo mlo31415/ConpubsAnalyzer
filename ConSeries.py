@@ -95,8 +95,10 @@ class ConSeriesPage():
             version=Float0(ExtractInvisibleTextInsideFanacComment(file, "version"))     # Look for a version in the file
             if version == 0:
                 version=1       # If this is not a version 0 file and no version is found in it, it's version 1
+        Log(f"{conseriesname}: {version=}")
 
-        Log(f"{conseriesname} -- {version}")
+        # Extract the list of con instances
+        # Version 0 files store data entirely differently from version 1 and above, so we handle them differently here
         listOfNLCs: list[NameLinkCounts]=[]
         if version < 0.99:
             try:
