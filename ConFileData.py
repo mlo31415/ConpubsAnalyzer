@@ -7,6 +7,8 @@ from ConpubsCounts import ConpubsCounts
 
 
 # An individual file to be listed under a convention
+# This is a version 0 format which is now used just to retrieve data from embedded json
+# Once retrieved, we move the data to a ConFileData class
 class ConInstanceLine:
     def __init__(self):
         self._sitefilename: str=""      # The name to be used for this file on the website
@@ -54,9 +56,7 @@ class ConInstanceLine:
         if self._pages is not None:
             cpc.numpages=self._pages
 
-        return cpc
-
-
+###################################################################
 # An individual file to be listed under a convention
 # This is a single row
 class ConFileData:
