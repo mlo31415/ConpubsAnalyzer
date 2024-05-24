@@ -44,9 +44,8 @@ def main():
 
     Log("\n\n")
     for csp in csplist:
-        Log(str(csp))
+        Log(f"{csp}")
 
-    Log(str(cpc))
     Log("\nGrand Total: "+cpc.Debug(), isError=True)
 
 
