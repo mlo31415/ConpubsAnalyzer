@@ -40,21 +40,7 @@ class ConInstanceLine:
             self._URL=d["_URL"]
         return self
 
-    @property
-    def Counts(self) -> ConpubsCounts:
-        Log(f"ConInstanceFile.Counts({self._sitefilename})")
-        cpc=ConpubsCounts()
-        _, ext = os.path.splitext(self._sitefilename.lower())
 
-        if ext == ".pdf":
-            cpc.numpdfs=1
-        if ext in [".jpeg", ".jpg", ".gif", ".png"]:
-            cpc.numimages=1
-        if self._isLink:
-            cpc.numlinks=1
-
-        if self._pages is not None:
-            cpc.numpages=self._pages
 
 ###################################################################
 # An individual file to be listed under a convention
@@ -134,9 +120,6 @@ class ConFileData:
         cf._pages=self._pages
         return cf
 
-    def Signature(self) -> int:
-        tot=hash(self._displayTitle.strip()+self._notes.strip()+self._localfilename.strip()+self._localpathname.strip()+self._sitefilename.strip())
-        return tot+hash(self._size)+hash(self._isText)+Int0(self.Pages)
 
 
     @property
