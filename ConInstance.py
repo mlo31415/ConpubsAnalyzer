@@ -67,7 +67,7 @@ class ConInstance:
             try:
                 self.FromJson(j)
             except (json.decoder.JSONDecodeError):
-                Log(f"CI.__init__: JSONDecodeError when loading convention information from /{coninstancename}index.html")
+                LogError(f"CI.__init__: JSONDecodeError when loading convention information from /{coninstancename}index.html")
                 return
 
             # Extract the info we need
@@ -75,7 +75,9 @@ class ConInstance:
 
         else:
             # Interpret the HTML
-            self.LoadConInstanceFromHTML(file)
+            if not self.LoadConInstanceFromHTML(file):
+                LogError(f"CI.__init__: LoadConInstanceFromHTML() failed when loading convention information from /{coninstancename}index.html")
+                return
 
         Log(f"CIC: /{seriesname}/{self._coninstancename}/index.html downloaded")
 
