@@ -77,7 +77,7 @@ class ConSeriesPage():
 
         assert len(conseriesname) > 0
         self.Seriesname=conseriesname
-        self.Datasource=ConSeries(conseriesname)
+        self.SeriesCons=ConSeries(conseriesname)
         self.Counts=ConpubsCounts()
         self.Counts.title=conseriesname
 
@@ -106,7 +106,7 @@ class ConSeriesPage():
                 return
 
             # Extract the info we need
-            for coninstance in self.Datasource._series:
+            for coninstance in self.SeriesCons._series:
                 listOfNLCs.append(NameLinkCounts(Name=coninstance._name, URL=coninstance._URL))
 
         else:
@@ -133,7 +133,7 @@ class ConSeriesPage():
             self.Seriesname=RemoveAccents(d["_textConSeries"])
             #self.TextFancyURL=RemoveAccents(d["_textFancyURL"])
             #self.TextComments=d["_textComments"]
-            self.Datasource=ConSeries(self.Seriesname).FromJson(d["_datasource"])
+            self.SeriesCons=ConSeries(self.Seriesname).FromJson(d["_datasource"])
         return self
 
     #----------------------------
