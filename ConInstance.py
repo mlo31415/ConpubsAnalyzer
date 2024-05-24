@@ -10,7 +10,7 @@ from ConpubsCounts import ConpubsCounts
 from HelpersPackage import FindBracketedText, Float0, Int0, ExtractInvisibleTextInsideFanacComment, FindBracketedText2
 from HelpersPackage import FindNextBracketedText, FindLinkInString
 
-from ConFile import ConFile, ConInstanceLine
+from ConFileData import ConFileData, ConInstanceLine
 
 # A ConInstancePage is needed to read json data
 # It gets turned into a ConInstance, which is the structure holding all the relevant parts of a ConInstance
@@ -31,7 +31,7 @@ class ConInstancePage:
             self._conPageFileList=[]
             for c in cfld:
                 cil=ConInstanceLine().FromJson(c)
-                cp=ConFile(CIL=cil)
+                cp=ConFileData(CIL=cil)
                 self._conPageFileList.append(cp)
 
         return self
@@ -41,7 +41,7 @@ class ConInstancePage:
 class ConInstance:
 
     def __init__(self, seriesname, coninstancename):
-        self._listConFiles: list[ConFile]=[]
+        self._listConFiles: list[ConFileData]=[]
         self._coninstancename=coninstancename
         self._seriesname=seriesname
 
@@ -71,7 +71,7 @@ class ConInstance:
                 return
 
             # Extract the info we need
-            self._listConFiles=[ConFile(CIL=x) for x in self.CIP._conPageFileList]
+            self._listConFiles=[ConFileData(CIL=x) for x in self.CIP._conPageFileList]
 
         else:
             # Interpret the HTML
@@ -132,7 +132,7 @@ class ConInstance:
         for row in rows:
             if row[0] == "li":
                 Log(f"\n{row[1]=}")
-                conf=ConFile()
+                conf=ConFileData()
                 # We're looking for an <a></a> followed by <small>/</small>
                 a, rest=FindBracketedText2(row[1], "a", includeBrackets=True)
                 Log(f"{a=}   {rest=}")
@@ -180,7 +180,7 @@ class ConInstance:
                 self._listConFiles.append(conf)
 
             elif row[0] == "b":
-                conf=ConFile()
+                conf=ConFileData()
                 conf.IsTextRow=True
                 conf.TextLineText=row[1]
                 #self._listConFiles.append(conf)

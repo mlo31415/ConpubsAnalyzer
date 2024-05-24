@@ -59,7 +59,7 @@ class ConInstanceLine:
 
 # An individual file to be listed under a convention
 # This is a single row
-class ConFile:
+class ConFileData:
     def __init__(self, CIL: ConInstanceLine=None):
         self._displayTitle: str=""      # The name as shown to the world on the website
         self._notes: str=""             # The free-format description
@@ -120,9 +120,9 @@ class ConFile:
 
         return cpc
 
-    # Make a deep copy of a ConFile
+    # Make a deep copy of a ConFileData
     def Copy(self):
-        cf=ConFile()
+        cf=ConFileData()
         cf._displayTitle=self._displayTitle
         cf._notes=self._notes
         cf._localfilename=self._localfilename
