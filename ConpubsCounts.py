@@ -24,29 +24,29 @@ class ConpubsCounts():
         s=""
         if self.title is not None and len(self.title) > 0:
             s+="** "+self.title+": "
-        s+="  #pages="+str(self.numpages)
-        s+="  #PDFs="+str(self.numpdfs)
-        s+="  #images="+str(self.numimages)
-        s+="  #links="+str(self.numlinks)
+        s+=f"  pages={self.numpages}"
+        s+=f"  PDFs={self.numpdfs}"
+        s+=f"  images={self.numimages}"
+        s+=f"  links={self.numlinks}"
         if self.numcons > 0:
-            s+="  #cons="+str(self.numcons)
+            s+=f"  cons={self.numcons}"
         if self.numseries > 0:
-            s+="  #series="+str(self.numseries)
-
+            s+=f"  series={self.numseries}"
         return s
+
 
     def __str__(self) -> str:
         s=""
         if self.title is not None and len(self.title) > 0:
-            s+="** "+self.title+" **\n"
-        s+="#pages="+str(self.numpages)+"\n"
-        s+="#PDFs="+str(self.numpdfs)+"\n"
-        s+="#images="+str(self.numimages)+"\n"
-        s+="#links="+str(self.numlinks)+"\n"
+            s+=f"** {self.title} **  "
+        s+=f"pages={self.numpages}  "
+        s+=f"PDFs={self.numpdfs}  "
+        s+=f"images={self.numimages}  "
+        s+=f"links={self.numlinks}  "
         if self.numcons > 0:
-            s+="#cons="+str(self.numcons)+"\n"
+            s+=f"cons={self.numcons}  "
         if self.numseries > 0:
-            s+="#series="+str(self.numseries)+"\n"
+            s+=f"series={self.numseries}  "
 
         return s
 
