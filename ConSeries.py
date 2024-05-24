@@ -30,18 +30,18 @@ class Con:
         #     self._URL=""
         return self
 
-
-    def Counts(self) -> ConpubsCounts:
-        Log(f"Con.Counts({self._seriesname}/{self._name})")
-        cidc=ConInstanceClass(self._seriesname, self._name)
-        cpc=ConpubsCounts()
-        for row in cidc.CIP._conPageFileList:        # Walk the list of files in a con instance, counting each in turn
-            if row._sitefilename is not None and len(row._sitefilename) > 0:
-                cpc+=row.Counts       # Increment the ConInstance the counts by adding the counts of one ConInstanceFile
-
-        cpc.numcons=1
-
-        return cpc
+    #
+    # def Counts(self) -> ConpubsCounts:
+    #     Log(f"Con.Counts({self._seriesname}/{self._name})")
+    #     cidc=ConInstanceClass(self._seriesname, self._name)
+    #     cpc=ConpubsCounts()
+    #     for row in cidc.CIP._conPageFileList:        # Walk the list of files in a con instance, counting each in turn
+    #         if row._sitefilename is not None and len(row._sitefilename) > 0:
+    #             cpc+=row.Counts       # Increment the ConInstance the counts by adding the counts of one ConInstanceFile
+    #
+    #     cpc.numcons=1
+    #
+    #     return cpc
 
 
 
