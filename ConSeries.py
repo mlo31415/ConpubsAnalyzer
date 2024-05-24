@@ -79,6 +79,7 @@ class ConSeriesPage():
         self.Seriesname=conseriesname
         self.Datasource=ConSeries(conseriesname)
         self.Counts=ConpubsCounts()
+        self.Counts.title=conseriesname
 
         Log(f"Loading /{self.Seriesname}/index.html from fanac.org")
         file=FTP().GetFileAsString("/"+self.Seriesname, "index.html")
