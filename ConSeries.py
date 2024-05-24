@@ -117,12 +117,12 @@ class ConSeriesPage():
 
         Log(f"{len(listOfNLCs)} instances found")
 
-        # Process the con instances
+        # Process the con instances getting a count for each and sum them up
         numcons=0
         for nlc in listOfNLCs:
-            if nlc.URL != "":
+            if nlc.URL != "":   # No URL is a con that is in the list, but with no data yet
                 ci=ConInstance("/"+self.Seriesname, nlc.name)
-                numcons+=1     # We just finished a con
+                numcons+=1
                 self.Counts+=ci.Totals
 
         self.Counts.numcons=numcons
