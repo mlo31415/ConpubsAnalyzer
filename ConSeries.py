@@ -121,6 +121,7 @@ class ConSeriesPage():
         numcons=0
         for nlc in listOfNLCs:
             if nlc.URL != "":   # No URL is a con that is in the list, but with no data yet
+                # Load the con instance from the server and compute its counts
                 ci=ConInstance("/"+self.Seriesname, nlc.name)
                 numcons+=1
                 self.Counts+=ci.Totals
