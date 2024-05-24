@@ -119,6 +119,7 @@ class ConSeriesPage():
             if nlc.URL != "":
                 ci=ConInstance("/"+self.Seriesname, nlc.name)
                 self.Counts+=ci.Counts
+                self.Counts+=ci.Totals
 
 
     def FromJson(self, val: str) -> ConSeriesPage:                    # MainConSeriesFrame

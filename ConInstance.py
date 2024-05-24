@@ -82,7 +82,7 @@ class ConInstance:
 
     # ----------------------------------------------
     @property
-    def Counts(self) -> ConpubsCounts:
+    def Totals(self) -> ConpubsCounts:
         counts=ConpubsCounts()
         for cf in self._listConFiles:
             if not cf.IsTextRow and not cf.IsEmptyRow and not cf.IsLinkRow:
