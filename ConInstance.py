@@ -1,13 +1,12 @@
 from __future__ import annotations
-from typing import List, Optional
+from typing import List
 
-import os
 import json
 import re
 
 from Log import Log, LogError
 from FTP import FTP
-from ConpubsCounts import ConpubsCounts, NameLinkCounts
+from ConpubsCounts import ConpubsCounts
 from HelpersPackage import FindBracketedText, Float0, Int0, ExtractInvisibleTextInsideFanacComment, FindBracketedText2
 from HelpersPackage import FindNextBracketedText, FindLinkInString
 
