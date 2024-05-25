@@ -11,6 +11,7 @@ class ConpubsCounts():
         self.numseries: int=0   # Number of convention series
         self.numlinks: int=0    # Number of external links
 
+
     def __add__(self, other: ConpubsCounts) -> ConpubsCounts:
         self.numpdfs+=other.numpdfs
         self.numpages+=other.numpages
@@ -19,6 +20,7 @@ class ConpubsCounts():
         self.numseries+=other.numseries
         self.numlinks+=other.numlinks
         return self
+
 
     def Debug(self) -> str:
         s=""
@@ -51,7 +53,7 @@ class ConpubsCounts():
         return s
 
 
-
+#-------------------------------------------------------------
 #-------------------------------------------------------------
 class NameLinkCounts:
     def __init__(self, Name: str = "", URL: str="", Counts: ConpubsCounts = ConpubsCounts()):

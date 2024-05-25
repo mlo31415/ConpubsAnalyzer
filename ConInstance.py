@@ -12,11 +12,11 @@ from HelpersPackage import FindNextBracketedText, FindLinkInString
 
 from ConFileData import ConFileData, ConInstanceLine
 
+
+#####################################################################################################
 # A ConInstancePage is needed to read json data
 # It gets turned into a ConInstance, which is the structure holding all the relevant parts of a ConInstance
 
-
-#####################################################################################################
 
 class ConInstancePage:
     def __init__(self):
