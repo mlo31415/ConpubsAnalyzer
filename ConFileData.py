@@ -2,7 +2,7 @@ import os
 import json
 
 from Log import Log
-from HelpersPackage import Float0, Int0, RemoveAccents
+from HelpersPackage import Float0, Int0
 from ConpubsCounts import ConpubsCounts
 
 
@@ -67,7 +67,6 @@ class ConFileData:
             self.Pages=CIL.Pages
 
 
-
     def __str__(self):
         s=""
         if len(self.SiteFilename) > 0:
@@ -87,6 +86,7 @@ class ConFileData:
 
         return s
 
+
     @property
     def Counts(self) -> ConpubsCounts:
         Log(f"ConInstanceFile.Counts({self.SiteFilename})")
@@ -99,7 +99,6 @@ class ConFileData:
             cpc.numimages=1
         if self.IsLinkRow:
             cpc.numlinks=1
-
         if self.Pages is not None:
             cpc.numpages=self.Pages
 
