@@ -87,7 +87,7 @@ class ConInstance:
     def ComputeCounts(self) -> ConpubsCounts:
         counts=ConpubsCounts()
         for cf in self._listConFiles:
-            if not cf.IsTextRow and not cf.IsEmptyRow and not cf.IsLinkRow:
+            if not cf.IsTextRow and not cf.IsEmptyRow:
                 counts+=cf.Counts
         Log(f"{self._coninstancename} = {counts}")
         return counts
