@@ -21,13 +21,8 @@ class Con:
     def FromJson(self, val: str) -> Con:
         d=json.loads(val)
         self._name=RemoveAccents(d["_name"])
-        # self._locale=d["_locale"]
-        # self._gohs=d["_gohs"]
-        # self._dates=FanzineDateRange().Match(d["_dates"])
         if "_URL" in d.keys():
             self._URL=d["_URL"]
-        # else:
-        #     self._URL=""
         return self
 
 
