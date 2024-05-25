@@ -174,7 +174,10 @@ class ConInstance:
                     small=small.replace("&nbsp;", " ")
                     m=re.match(".*?([0-9.]+) MB", small, re.IGNORECASE)
                     if m is not None:
-                        conf.Size=Float0(m.group(1))
+                        val=Float0(m.group(1))
+                        if val > 500:  # We're looking for a value in MB, but if we get a value in bytes, convert it
+                            val=val/(1024**2)
+                        conf.Size=val
                     m=re.match(".*?([0-9]+) pp", small, re.IGNORECASE)
                     if m is not None:
                         conf.Pages=Int0(m.group(1))
@@ -184,9 +187,9 @@ class ConInstance:
             elif row[0] == "b":
                 conf=ConFileData()
                 conf.IsTextRow=True
-                conf.TextLineText=row[1]
+                conf.DisplayTitle=row[1]
                 #self._listConFiles.append(conf)
-                Log(f"LoadConInstanceFromHTML(): Text line: {conf.TextLineText}")
+                Log(f"LoadConInstanceFromHTML(): Text line: {conf.DisplayTitle}")
 
         return True
 
