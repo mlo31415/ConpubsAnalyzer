@@ -28,7 +28,7 @@ def main():
         version="2.0"
 
     listOfConSeries=DownloadMainConlist()
-    listOfConSeries=[x for x in listOfConSeries if "Natcon" in x.name]# or "Capclave" in x .name]
+    #listOfConSeries=[x for x in listOfConSeries if "Worldcon" in x.name]#  or "Khan" in x .name]
 
     FTP().SetLogging(False)
 
